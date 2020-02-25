@@ -1,2 +1,2 @@
 # Conversational-Agents
-Code for 'Making Machines Converse Better'
+The repository contains code for final year project titled "Making Machines Converse Better"
