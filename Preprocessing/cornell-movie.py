@@ -1,3 +1,7 @@
+#
+#This code takes borrow heavily from chatbot tutorial presented over pytorch website
+#
+
 #necessary imports
 
 import os
@@ -7,14 +11,13 @@ import random
 import itertools
 import time
 
-path='C:\\Users\\deepa\\Conversational Agents\\Datasets'
-dataset='cornell movie-dialogs corpus'
 
-data_folder=os.path.join(path,dataset)
+PAD_Token=0
+START_Token=1
+END_Token=2
 
-print("The final data corpus folder: "+str(data_folder))
 
-def get_lines_conversations():
+def get_lines_conversations(data_folder):
     """
     Loads movie lines and conversations from the dataset.
     
@@ -38,21 +41,8 @@ def get_lines_conversations():
 
     return movie_lines,movie_conversations
 
-t1=time.time()
-print("Extracting movie lines and movie conversations...")
-movie_lines,movie_conversations=get_lines_conversations()
 
-print("Number of distinct lines: "+str(len(movie_lines)))
-print("Number of conversations: "+str(len(movie_conversations)))
-print("Average Number of lines per conversations: "+str(len(movie_lines)/len(movie_conversations)))
-
-print(movie_lines[0])
-print(movie_conversations[0])
-
-print("Extracting took place in: "+str(time.time()-t1))
-
-exceptions=[]
-def loadLines(movie_lines,fields):
+def loadLines(movie_lines,fields,exceptions):
     lines={}
     for lineid in range(len(movie_lines)):
         
@@ -110,26 +100,6 @@ def sentencePairs(conversations):
     return qr_pairs
 
 
-t1=time.time()
-print("Separating meaningfull information for our model...")
-
-lines={}
-conversations=[]
-qr_pairs=[]
-
-movie_lines_fields=["lineID","characterID","movieID","character","text"]
-movie_convo_fields=["charcaterID","character2ID","movieID","utteranceIDs"]
-
-lines=loadLines(movie_lines,movie_lines_fields)
-conversations=loadConversations(movie_conversations,lines,movie_convo_fields)
-qr_pairs=sentencePairs(conversations)
-
-print("The number of query-response pairs are: "+str(len(qr_pairs)))
-print("Separation took place in: "+str(time.time()-t1))
-
-PAD_Token=0
-START_Token=1
-END_Token=2
 
 class Vocabulary:
     def __init__(self):
@@ -206,10 +176,6 @@ def prepareDataset(qr_pairs):
 #     print("Number"+str(voc.num_words))
     return voc,qr_pairs
 
-t1=time.time()
-print("Preparing dataset and corresponding vocabulary...")
-voc, pairs=prepareDataset(qr_pairs)
-print("Preparation took place in: "+str(time.time()-t1))
 
 Min_Count=3
 
@@ -240,12 +206,6 @@ def trimRareWords(voc,qr_pairs):
             
     return keep_pairs
 
-t1=time.time()
-print("Trimming rare words from vocabulary and dataset..")
-
-pairs=trimRareWords(voc,pairs)
-
-print("Trimming took place in: "+str(time.time()-t1))
 
 
 def indexesFromSentence(voc,sentence):
@@ -304,21 +264,63 @@ def batch2TrainData(voc,pair_batch):
     max_out_length,mask,tokenised_output=outputVar(voc,output_batch)
     return input_lengths,tokenised_input,max_out_length,mask,tokenised_output
 
-print("Number of query-response pairs after all the preprocessing: "+str(len(pairs)))
+# print("Number of query-response pairs after all the preprocessing: "+str(len(pairs)))
 
-#Sample batch
-batch=[random.choice(pairs) for _ in range(5)]
-input_lengths,tokenised_input,max_out_length,mask,tokenised_output=batch2TrainData(voc,batch)
+# #Sample batch
+# batch=[random.choice(pairs) for _ in range(5)]
+# input_lengths,tokenised_input,max_out_length,mask,tokenised_output=batch2TrainData(voc,batch)
 
-print("Input length: "+str(input_lengths)+" Size: "+str(input_lengths.shape))
-print("-"*80)
-print("Tokenised Input: "+str(tokenised_input)+" Size: "+str(tokenised_input.shape))
-print("-"*80)
-print("Max out length: "+str(max_out_length)+" Size: "+str(max_out_length.shape))
-print("-"*80)
-print("Mask: "+str(mask)+" Size: "+str(mask.shape))
-print("-"*80)
-print("Tokenised Output: "+str(tokenised_output)+" Size: "+str(tokenised_output.shape))
-print("-"*80)
+# print("Input length: "+str(input_lengths)+" Size: "+str(input_lengths.shape))
+# print("-"*80)
+# print("Tokenised Input: "+str(tokenised_input)+" Size: "+str(tokenised_input.shape))
+# print("-"*80)
+# print("Max out length: "+str(max_out_length)+" Size: "+str(max_out_length.shape))
+# print("-"*80)
+# print("Mask: "+str(mask)+" Size: "+str(mask.shape))
+# print("-"*80)
+# print("Tokenised Output: "+str(tokenised_output)+" Size: "+str(tokenised_output.shape))
+# print("-"*80)
+
+
+def get_vocabulary():
+    path='C:\\Users\\deepa\\Conversational Agents\\Datasets'
+    dataset='cornell movie-dialogs corpus'
+
+    data_folder=os.path.join(path,dataset)
+
+    print("The final data corpus folder: "+str(data_folder))
+    print("Extracting movie lines and movie conversations...")
+
+    movie_lines,movie_conversations=get_lines_conversations(data_folder)
+
+    print("Number of distinct lines: "+str(len(movie_lines)))
+    print("Number of conversations: "+str(len(movie_conversations)))
+    print("Average Number of lines per conversations: "+str(len(movie_lines)/len(movie_conversations)))
+
+    lines={}
+    conversations=[]
+    qr_pairs=[]
+
+    exceptions=[]
+    
+    PAD_Token=0
+    START_Token=1
+    END_Token=2
+
+    movie_lines_fields=["lineID","characterID","movieID","character","text"]
+    movie_convo_fields=["charcaterID","character2ID","movieID","utteranceIDs"]
+
+    lines=loadLines(movie_lines,movie_lines_fields,exceptions)
+    conversations=loadConversations(movie_conversations,lines,movie_convo_fields)
+    qr_pairs=sentencePairs(conversations)
+
+    voc, pairs=prepareDataset(qr_pairs)
+
+    pairs=trimRareWords(voc,pairs)
+    
+    return voc
+
+voc=get_vocabulary()
+
 
 
