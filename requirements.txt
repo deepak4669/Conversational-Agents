@@ -233,7 +233,7 @@ sympy==1.5.1
 tables==3.6.1
 tblib==1.6.0
 tensorboard==1.13.0
-tensorflow==1.13.1
+tensorflow==1.15.2
 terminado==0.8.3
 testpath==0.4.4
 tokenizers==0.4.2
