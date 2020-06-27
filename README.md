@@ -18,8 +18,8 @@ The available models, decoding algorithms, datasets can be infer from below.
 Sequence to Sequence based on [Transformer](https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf).
 
 ### Decoding Algorithms
-Greedy decoding. `greedy`
-Beam Search decoding. `beam-search` followed by beam size as decoding parameter.
-Top-K Sampling decoding. `top-k` followed by number of samples to be considered for the random sampling as the decoding parameter.
-[Nucleus Sampling](https://arxiv.org/pdf/1904.09751.pdf). `nucleus` followed by cumulative probabilty score to be kept for the sampling as the decoding parameter.
+-Greedy decoding. `greedy`
+-Beam Search decoding. `beam-search` followed by beam size as decoding parameter.
+-Top-K Sampling decoding. `top-k` followed by number of samples to be considered for the random sampling as the decoding parameter.
+-[Nucleus Sampling](https://arxiv.org/pdf/1904.09751.pdf). `nucleus` followed by cumulative probabilty score to be kept for the sampling as the decoding parameter.
 
