@@ -243,7 +243,7 @@ tornado==6.0.3
 tqdm==4.42.1
 traitlets==4.3.3
 typing-extensions==3.7.4.1
-ujson==1.35
+ujson==5.4.0
 unicodecsv==0.14.1
 unidecode==1.1.1
 untokenize==0.1.1
