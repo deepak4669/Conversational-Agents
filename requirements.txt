@@ -247,7 +247,7 @@ ujson==5.4.0
 unicodecsv==0.14.1
 unidecode==1.1.1
 untokenize==0.1.1
-urllib3==1.26.18
+urllib3==1.26.19
 virtualenv==20.0.25
 virtualenv-clone==0.5.4
 visdom==0.1.8.9
